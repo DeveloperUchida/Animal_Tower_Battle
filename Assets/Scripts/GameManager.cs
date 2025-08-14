@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using TMPro;
+using System.Data.Common;
 
 [RequireComponent(typeof(AudioSource))] //AudioSourceコンポーネントが必要
 public class GameManager : MonoBehaviour
@@ -28,7 +29,12 @@ public class GameManager : MonoBehaviour
         isInterval = false; //間隔制御フラグをリセット
         isButtonHover = false; //ボタンのホバー状態をリセット
 
-         audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
+
+        score = 0; //スコア情報初期値
+
+        isGameStarted = false; //ゲームが始まったかのフラグ
+        scoreText.text = score.ToString();//スコアテキストの初期化
     }
     // Update is called once per frame
     void Update()
@@ -44,6 +50,11 @@ public class GameManager : MonoBehaviour
         {
             CreateCaractor(); //キャラクターを生成
             isGene = true;
+            if (isGameStarted)
+
+                UpdateScore();
+            else
+                isGameStarted = true;
         }
         //マウスの左ボタンが離されたとき、かつキャラクターが生成されている場合
         else if (Input.GetMouseButtonUp(0) && isGene && !isButtonHover)
@@ -119,4 +130,11 @@ public class GameManager : MonoBehaviour
         return false; //キャラクターが動いていない場合はfalse
     }
 
+
+    void UpdateScore()
+    {
+        score++; //スコアを加算
+        scoreText.text = score.ToString(); //スコア情報を更新
+        Debug.Log("現在のスコア" + score + "です");
+    }
 }
